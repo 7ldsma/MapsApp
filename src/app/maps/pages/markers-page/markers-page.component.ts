@@ -3,10 +3,14 @@ import { LngLat, Map, Marker } from 'mapbox-gl';
 
 
 interface MarkerAndColor {
-  color: string,
-  marker: Marker,
+  color: string;
+  marker: Marker;
 }
 
+interface PlainMarker{
+  color: string;
+  lngLat: number[];
+}
 
 
 @Component({
@@ -36,6 +40,8 @@ export class MarkersPageComponent {
 	  zoom: this.zoom, // starting zoom
     });
 
+
+    this.readFromLocalStorage();
 
     // const markerHtml = document.createElement('div');
     // markerHtml.innerHTML = 'Alvaro Ledesma'
@@ -80,6 +86,11 @@ export class MarkersPageComponent {
         color,
         marker,
       });  //agrego cada marker que creo en el array de markers
+
+      this.saveToLocalStorage();
+
+      marker.on('dragend',() => this.saveToLocalStorage() );
+
   }
 
 
@@ -100,12 +111,33 @@ export class MarkersPageComponent {
 // para hacer persistentes los marcadores los siguientes metodos
 
   saveToLocalStorage() {
+    const plainMarkers: PlainMarker[] = this.markers.map( ({ color, marker }) => {
+
+      return {
+        color,
+        lngLat: marker.getLngLat().toArray()
+      }
+    });
+
+    localStorage.setItem('plainMarkers', JSON.stringify( plainMarkers ))  
 
   }
 
 
   readFromLocalStorage() {
     
+    const plainMarkersString = localStorage.getItem('plainMarkers') ?? '[]';
+
+    const plainMarkers: PlainMarker[] = JSON.parse( plainMarkersString );
+
+    plainMarkers.forEach( ({ color, lngLat }) => {
+
+      const [ lng, lat ] = lngLat;
+      const coords = new LngLat( lng, lat );   // esto tambien podria escribirse como new LngLat( lgnLat[0], lngLat[1] )
+      
+      this.addMarker( coords, color);
+    });
+
   }
 
 
