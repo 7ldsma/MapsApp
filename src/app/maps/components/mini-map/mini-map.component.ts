@@ -15,21 +15,25 @@ export class MiniMapComponent implements AfterViewInit{
 
   // public markers: MarkerAndColor[] = [];
 
-  public zoom: number = 12;
-  public map?: Map;
-  public currentLngLat: LngLat = new LngLat(2.164, 41.389);
+  public zoom: number = 15;
   
   ngAfterViewInit(): void {
     
     if( !this.divMap?.nativeElement ) throw 'Map no encontrado';
     if ( !this.lngLat ) throw 'lngLat no puede ser null'
 
-    this.map = new Map({
+    const map = new Map({
       container: this.divMap.nativeElement, // container ID
       style: 'mapbox://styles/mapbox/streets-v12', // style URL
-      center: this.currentLngLat, // starting position [lng, lat]
+      center: this.lngLat, // starting position [lng, lat]
       zoom: this.zoom, // starting zoom
+      interactive: false,
       });
+
+
+      new Marker()
+        .setLngLat( this.lngLat )
+        .addTo( map )
 
   }
 
