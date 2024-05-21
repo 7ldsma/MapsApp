@@ -5,6 +5,7 @@ import { FullScreenPageComponent } from './pages/full-screen-page/full-screen-pa
 import { ZoomRangePageComponent } from './pages/zoom-range-page/zoom-range-page.component';
 import { MarkersPageComponent } from './pages/markers-page/markers-page.component';
 import { PropertiesPageComponent } from './pages/properties-page/properties-page.component';
+import { AlonePageComponent } from '../alone/pages/alone-page/alone-page.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,9 @@ const routes: Routes = [
       },
       {
         path: 'properties', component: PropertiesPageComponent
+      },
+      {
+        path: 'alone', component: AlonePageComponent
       },
       {
         path: '**', redirectTo: 'fullscreen'
